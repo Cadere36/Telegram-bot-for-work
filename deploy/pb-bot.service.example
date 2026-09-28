@@ -1,0 +1,24 @@
+# Пример systemd unit для запуска бота на сервере организации (Linux).
+# Установка:
+#   1. Скопировать бинарник bin/pb-bot на сервер, например в /opt/pb-bot/pb-bot
+#   2. Положить .env рядом: /opt/pb-bot/.env
+#   3. Скопировать этот файл в /etc/systemd/system/pb-bot.service
+#   4. sudo systemctl daemon-reload
+#   5. sudo systemctl enable --now pb-bot
+
+[Unit]
+Description=PB Bot - Telegram bot for fire safety photo analysis
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/pb-bot
+EnvironmentFile=/opt/pb-bot/.env
+ExecStart=/opt/pb-bot/pb-bot
+Restart=on-failure
+RestartSec=5
+User=pbbot
+
+[Install]
+WantedBy=multi-user.target
